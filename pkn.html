@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warisan Budaya Taiwan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000000;
+            --navy: #14213D;
+            --gold: #FCA311;
+            --light-gray: #E5E5E5;
+            --white: #FFFFFF;
+            --gradient: linear-gradient(135deg, #FCA311 0%, #FFD166 100%);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--white);
+            color: var(--navy);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: var(--navy);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.4s ease;
+        }
+
+        header.scrolled {
+            padding: 15px 0;
+            background-color: rgba(20, 33, 61, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        header a {
+            color: var(--light-gray);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        header a:hover {
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        header a.active {
+            background-color: var(--gold);
+            color: var(--navy);
+        }
+
+        header a.active:hover {
+            color: var(--navy);
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('Museum.png') center/cover no-repeat;
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: var(--white);
+            clip-path: polygon(0 70%, 100% 0, 100% 100%, 0% 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 0 30px;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.3s;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            font-weight: 800;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero h1 span {
+            color: var(--gold);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background-color: var(--gold);
+            opacity: 0.3;
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: underline 1.5s forwards 1s;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 30px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient);
+        }
+
+        .section-title {
+            color: var(--navy);
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-color: var(--gold);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            height: 300px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: var(--white);
+            padding: 25px;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--gradient);
+            color: var(--navy);
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(252,163,17,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(252,163,17,0.4);
+            color: var(--navy);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .highlight {
+            background-color: rgba(20,33,61,0.05);
+            border-left: 5px solid var(--gold);
+            padding: 30px;
+            margin: 40px 0;
+            border-radius: 0 12px 12px 0;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .highlight:hover {
+            background-color: rgba(20,33,61,0.1);
+            transform: translateX(10px);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 50px auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--gold);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-content {
+            padding: 30px;
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            border: 1px solid var(--light-gray);
+        }
+
+        .timeline-content::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--white);
+            border: 4px solid var(--gold);
+            border-radius: 50%;
+            top: 30px;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::after {
+            right: -12px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::after {
+            left: -12px;
+        }
+
+        /* Image Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            animation: zoomIn 0.3s ease;
+        }
+
+        .modal-caption {
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.5rem;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: var(--gold);
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            transform: rotate(90deg);
+            color: var(--white);
+        }
+
+        footer {
+            background-color: var(--navy);
+            color: var(--white);
+            text-align: center;
+            padding: 70px 0 30px;
+            margin-top: 100px;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: var(--white);
+            clip-path: polygon(0 0, 100% 70%, 100% 100%, 0% 100%);
+        }
+
+        .social-icons {
+            margin: 40px 0;
+        }
+
+        .social-icons a {
+            color: var(--white);
+            font-size: 28px;
+            margin: 0 15px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .social-icons a:hover {
+            color: var(--gold);
+            transform: translateY(-10px) scale(1.2);
+            background-color: rgba(252,163,17,0.2);
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: var(--gradient);
+            color: var(--navy);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 99;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes underline {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .timeline::before {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content::after,
+            .timeline-item:nth-child(even) .timeline-content::after {
+                left: 18px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .hero {
+                height: 80vh;
+                min-height: 600px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section {
+                padding: 30px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            header a {
+                display: block;
+                margin: 5px auto;
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header id="mainHeader">
+        <a href="index.html" class="active"><i class="fas fa-home"></i> Home</a>
+        <a href="agama.html"><i class="fas fa-pray"></i> Agama</a>
+        <a href="pkn.html"><i class="fas fa-landmark"></i> PKN</a>
+        <a href="bahasaindonesia.html"><i class="fas fa-book"></i> Bahasa Indonesia</a>
+        <a href="bahasainggris.html"><i class="fas fa-language"></i> Bahasa Inggris</a>
+        <a href="ips.html"><i class="fas fa-globe-asia"></i> IPS</a>
+        <a href="bahasamandarin.html"><i class="fas fa-language"></i> Bahasa Mandarin</a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1><span>Warisan Budaya</span> Taiwan</h1>
+            <p>Menjelajahi kekayaan sejarah dan budaya melalui National Palace Museum dan Chiang Kai-shek Memorial Hall</p>
+            <a href="#museum" class="btn"><i class="fas fa-arrow-down"></i> Mulai Jelajahi</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- National Palace Museum Section -->
+        <section id="museum" class="section">
+            <h2 class="section-title"><i class="fas fa-landmark"></i> National Palace Museum</h2>
+            <p>National Palace Museum di Taiwan adalah salah satu museum terpenting di dunia yang menyimpan koleksi seni dan artefak kekaisaran Tiongkok dari Dinasti Ming dan Qing, termasuk lukisan, kaligrafi, keramik, dan giok. Sebagai pusat pelestarian budaya Tionghoa, museum ini tidak hanya menjadi destinasi wisata populer tetapi juga pusat penelitian dan pendidikan yang menarik akademisi internasional.</p>
+            
+            <div class="highlight">
+                <p>Dengan memamerkan harta karun sejarah yang dibawa dari Istana Terlarang di Beijing, museum ini memainkan peran kunci dalam mempromosikan warisan budaya Tiongkok sekaligus memperkuat identitas budaya Taiwan di panggung global.</p>
+            </div>
+            
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="Museum.png" alt="National Palace Museum">
+                    <div class="gallery-caption">National Palace Museum</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="Galeri 1.png" alt="Koleksi Museum">
+                    <div class="gallery-caption">Koleksi Seni Kekaisaran</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="Galeri 2.png" alt="Pameran Museum">
+                    <div class="gallery-caption">Pameran Budaya</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chiang Kai-shek Section -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-monument"></i> Chiang Kai-shek Memorial Hall</h2>
+            <p>Chiang Kai-shek Memorial Hall dibangun untuk mengenang Chiang Kai-shek, mantan pemimpin Republik Tiongkok (ROC) yang memainkan peran sentral dalam sejarah Taiwan. Selain sebagai simbol politik dan sejarah era Kuomintang (KMT), bangunan ikonik ini berfungsi sebagai pusat kegiatan budaya, seperti pameran seni, pertunjukan tradisional, dan festival.</p>
+            
+            <div class="highlight">
+                <p>Dengan arsitektur megah dan taman yang luas, memorial ini menjadi salah satu daya tarik wisata utama di Taipei sekaligus tempat refleksi atas perkembangan Taiwan modern.</p>
+            </div>
+            
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="Kai Shek.png" alt="Chiang Kai-shek Memorial">
+                    <div class="gallery-caption">Chiang Kai-shek Memorial Hall</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="Kai Shek 1.png" alt="Arsitektur Memorial">
+                    <div class="gallery-caption">Arsitektur Megah</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="Kai Shek 2.png" alt="Area Memorial">
+                    <div class="gallery-caption">Area Taman Memorial</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-history"></i> Garis Waktu Sejarah</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Pendirian National Palace Museum</h3>
+                        <p>Museum ini didirikan pada tahun 1925 di Beijing, kemudian koleksinya dipindahkan ke Taiwan selama Perang Saudara Tiongkok pada akhir 1940-an.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Pembangunan Chiang Kai-shek Memorial</h3>
+                        <p>Pembangunan memorial dimulai pada tahun 1976 untuk menghormati Chiang Kai-shek setelah kematiannya pada tahun 1975.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Pembukaan untuk Publik</h3>
+                        <p>Chiang Kai-shek Memorial Hall dibuka untuk umum pada tahun 1980, menjadi simbol penting sejarah Taiwan modern.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Renovasi Besar-besaran</h3>
+                        <p>National Palace Museum menjalani renovasi besar dari tahun 2001-2006 untuk memperluas fasilitas dan meningkatkan pengalaman pengunjung.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="modalCaption" class="modal-caption"></div>
+    </div>
+
+    <footer>
+        <h3>Warisan Budaya Taiwan</h3>
+        <p>Menjelajahi kekayaan sejarah dan budaya Taiwan</p>
+        
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        
+        <p>&copy; 2023 Warisan Budaya Taiwan. All rights reserved.</p>
+    </footer>
+
+    <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+
+    <script>
+        // Back to top button
+        window.addEventListener('scroll', function() {
+            var backToTop = document.getElementById('backToTop');
+            var header = document.getElementById('mainHeader');
+            
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+                header.classList.add('scrolled');
+            } else {
+                backToTop.classList.remove('visible');
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('header a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animation for sections when scrolling
+        const sections = document.querySelectorAll('.section');
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+        
+        timelineItems.forEach(item => {
+            observer.observe(item);
+        });
+
+        // Image Modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const captionText = document.getElementById('modalCaption');
+        
+        document.querySelectorAll('.gallery-item img').forEach(img => {
+            img.addEventListener('click', function() {
+                modal.classList.add('show');
+                modalImg.src = this.src;
+                captionText.innerHTML = this.parentElement.querySelector('.gallery-caption').innerHTML;
+            });
+        });
+        
+        document.querySelector('.close').addEventListener('click', function() {
+            modal.classList.remove('show');
+        });
+        
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+
+        // Set active navigation item based on scroll position
+        window.addEventListener('scroll', function() {
+            let fromTop = window.scrollY + 100;
+            
+            document.querySelectorAll('header a').forEach(link => {
+                let section = document.querySelector(link.getAttribute('href'));
+                
+                if (section && 
+                    section.offsetTop <= fromTop && 
+                    section.offsetTop + section.offsetHeight > fromTop) {
+                    
+                    document.querySelectorAll('header a').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Hero animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroContent = document.querySelector('.hero-content');
+            heroContent.style.animation = 'fadeInUp 1s forwards';
+        });
+    </script>
+</body>
+</html>
