@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taiwan's Famous and Delicious Food</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000000;
+            --navy: #14213D;
+            --gold: #FCA311;
+            --light-gray: #E5E5E5;
+            --white: #FFFFFF;
+            --gradient: linear-gradient(135deg, #FCA311 0%, #FFD166 100%);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--white);
+            color: var(--navy);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: var(--navy);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.4s ease;
+        }
+
+        header.scrolled {
+            padding: 15px 0;
+            background-color: rgba(20, 33, 61, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        header a {
+            color: var(--light-gray);
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        header a:hover {
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        header a.active {
+            background-color: var(--gold);
+            color: var(--navy);
+            box-shadow: 0 5px 15px rgba(252, 163, 17, 0.4);
+        }
+
+        header a.active:hover {
+            color: var(--navy);
+        }
+
+        header a i {
+            margin-right: 8px;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: var(--white);
+            clip-path: polygon(0 70%, 100% 0, 100% 100%, 0% 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 0 30px;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.3s;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 25px;
+            font-weight: 800;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .hero h1 span {
+            color: var(--gold);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background-color: var(--gold);
+            opacity: 0.3;
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: underline 1.5s forwards 1s;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-weight: 300;
+            opacity: 0.9;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 30px;
+        }
+
+        .section {
+            margin-bottom: 100px;
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient);
+        }
+
+        .section-title {
+            color: var(--navy);
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-color: var(--gold);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .section-title i {
+            margin-right: 15px;
+            color: var(--gold);
+        }
+
+        /* Mindmap Section */
+        .mindmap-section {
+            text-align: center;
+            margin: 60px 0;
+        }
+
+        .mindmap-container {
+            display: inline-block;
+            position: relative;
+            max-width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+        }
+
+        .mindmap-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .mindmap-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Gallery Styles */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            height: 300px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: var(--white);
+            padding: 25px;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        /* Interactive Box */
+        .interactive-box {
+            background: linear-gradient(135deg, var(--navy), #1a2a6c);
+            color: var(--white);
+            padding: 40px;
+            border-radius: 16px;
+            margin: 50px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(252,163,17,0.1) 0%, rgba(252,163,17,0) 70%);
+            animation: pulse 8s infinite linear;
+        }
+
+        @keyframes pulse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .interactive-box h3 {
+            color: var(--gold);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .interactive-box p {
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+        }
+
+        /* Vocabulary Cards */
+        .vocabulary-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .vocabulary-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-left: 5px solid var(--gold);
+        }
+
+        .vocabulary-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .vocabulary-card h3 {
+            color: var(--navy);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .vocabulary-card p {
+            margin-bottom: 10px;
+        }
+
+        .vocabulary-card strong {
+            color: var(--gold);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 50px;
+            margin: 60px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .quiz-question {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .quiz-question:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .quiz-question p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--navy);
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .quiz-option {
+            background-color: var(--light-gray);
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border-left: 5px solid transparent;
+        }
+
+        .quiz-option:hover {
+            background-color: #e0e0e0;
+        }
+
+        .quiz-option.correct {
+            background-color: rgba(75, 181, 67, 0.1);
+            border-left: 5px solid #4bb543;
+        }
+
+        .quiz-option.incorrect {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left: 5px solid #dc3545;
+        }
+
+        .quiz-feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .quiz-feedback i {
+            margin-right: 10px;
+        }
+
+        .correct-feedback {
+            background-color: rgba(75, 181, 67, 0.1);
+            color: #4bb543;
+        }
+
+        .incorrect-feedback {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            background: var(--gradient);
+            color: var(--navy);
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(252,163,17,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(252,163,17,0.4);
+            color: var(--navy);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--navy);
+            color: var(--white);
+            text-align: center;
+            padding: 70px 0 30px;
+            margin-top: 100px;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: var(--white);
+            clip-path: polygon(0 0, 100% 70%, 100% 100%, 0% 100%);
+        }
+
+        .social-icons {
+            margin: 40px 0;
+        }
+
+        .social-icons a {
+            color: var(--white);
+            font-size: 28px;
+            margin: 0 15px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .social-icons a:hover {
+            color: var(--gold);
+            transform: translateY(-10px) scale(1.2);
+            background-color: rgba(252,163,17,0.2);
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: var(--gradient);
+            color: var(--navy);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 99;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes underline {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 1200px) {
+            .hero h1 {
+                font-size: 4rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media screen and (max-width: 992px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            
+            .section {
+                padding: 40px;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .hero {
+                height: 80vh;
+                min-height: 600px;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .section {
+                padding: 30px;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            header a {
+                margin: 0 10px;
+                padding: 6px 15px;
+                font-size: 1rem;
+            }
+
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section {
+                padding: 25px;
+                margin-bottom: 70px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                padding: 15px 0;
+            }
+            
+            header a {
+                display: block;
+                margin: 5px auto;
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header id="mainHeader">
+        <div class="nav-container">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="agama.html"><i class="fas fa-pray"></i> Agama</a>
+            <a href="pkn.html"><i class="fas fa-landmark"></i> PKN</a>
+            <a href="bahasaindonesia.html"><i class="fas fa-book"></i> Bahasa Indonesia</a>
+            <a href="bahasainggris.html" class="active"><i class="fas fa-language"></i> Bahasa Inggris</a>
+            <a href="ips.html"><i class="fas fa-globe-asia"></i> IPS</a>
+            <a href="bahasamandarin.html"><i class="fas fa-language"></i> Bahasa Mandarin</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1><span>Taiwan's</span> Culinary Wonders</h1>
+            <p>Explore the delicious and diverse food culture of Taiwan while improving your English skills</p>
+            <a href="#discover" class="btn"><i class="fas fa-utensils"></i> Start Exploring</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Mindmap Section -->
+        <div class="mindmap-section">
+            <div class="mindmap-container">
+                <img src="English RW Mindmap.png" alt="Taiwan Food Mindmap" class="modal-trigger">
+            </div>
+            <p style="margin-top: 20px; font-size: 1.2rem; color: var(--navy);">Explore Taiwan's culinary wonders through this interactive guide</p>
+        </div>
+
+        <section id="discover" class="section">
+            <h2 class="section-title"><i class="fas fa-compass"></i> Discover Taiwan Through English</h2>
+            <p>Taiwan offers a fascinating blend of culture, history, and cuisine that provides excellent material for English learning. By exploring Taiwan's unique characteristics in English, you can improve your language skills while learning about this beautiful island.</p>
+            
+            <div class="interactive-box">
+                <h3>Did You Know?</h3>
+                <p>Taiwan's night markets are among the best places to practice English while enjoying delicious food. Many vendors speak basic English and are happy to converse with international visitors.</p>
+                <button class="btn" id="moreFactsBtn"><i class="fas fa-lightbulb"></i> Show More Facts</button>
+                <div id="moreFacts" style="display: none; margin-top: 20px;">
+                    <p><i class="fas fa-check-circle" style="color: var(--gold);"></i> Bubble tea, now popular worldwide, originated in Taiwan in the 1980s</p>
+                    <p><i class="fas fa-check-circle" style="color: var(--gold);"></i> Taiwan has over 300 night markets, each with its own specialties</p>
+                    <p><i class="fas fa-check-circle" style="color: var(--gold);"></i> The term "stinky tofu" was first translated by English-speaking visitors to Taiwan</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-utensils"></i> Taiwan's Culinary Delights</h2>
+            <p>In Taiwan, people from all over can try many interesting and unique foods. We can try oyster omelets, stinky tofu, street steak, and more. People from all over the world can try those foods in famous night markets or Old Streets. One of the Old Streets is Jiufen Old Street. The food in Old Street offers us a unique taste of Taiwan, and every food in Jiufen old street can have a history behind it.</p>
+            
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="Keelung Night Market.png" alt="Keelung Night Market">
+                    <div class="gallery-caption">
+                        <strong>Keelung Night Market</strong> - One of Taiwan's most famous food destinations
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="Jiufen Old Street.png" alt="Jiufen Old Street">
+                    <div class="gallery-caption">
+                        <strong>Jiufen Old Street</strong> - A historic street with traditional Taiwanese snacks
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="Stinky Tofu.jpg" alt="Stinky Tofu">
+                    <div class="gallery-caption">
+                        <strong>Stinky Tofu</strong> - Taiwan's most famous (and smelly) delicacy
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="color: var(--navy); margin-top: 50px; font-size: 1.8rem;">Food Vocabulary</h3>
+            <div class="vocabulary-list">
+                <div class="vocabulary-card">
+                    <h3>Oyster Omelet (蚵仔煎)</h3>
+                    <p>A popular Taiwanese snack made with eggs, oysters, and starch.</p>
+                    <p><strong>Pronunciation:</strong> /ˈɔɪ.stər ˈɒm.ə.leɪ/</p>
+                </div>
+                <div class="vocabulary-card">
+                    <h3>Stinky Tofu (臭豆腐)</h3>
+                    <p>Fermented tofu with a strong odor but delicious taste.</p>
+                    <p><strong>Pronunciation:</strong> /ˈstɪŋ.ki ˈtoʊ.fuː/</p>
+                </div>
+                <div class="vocabulary-card">
+                    <h3>Bubble Tea (珍珠奶茶)</h3>
+                    <p>Sweet tea drink with chewy tapioca pearls.</p>
+                    <p><strong>Pronunciation:</strong> /ˈbʌb.əl tiː/</p>
+                </div>
+                <div class="vocabulary-card">
+                    <h3>Gua Bao (刈包)</h3>
+                    <p>Taiwanese hamburger with pork belly in a steamed bun.</p>
+                    <p><strong>Pronunciation:</strong> /ɡwɑː baʊ/</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-fish"></i> The Discovery of Taiwan's Seafood</h2>
+            <p>Taiwan is famous for its fresh and delicious seafood. We can discover new seafood places in almost every corner. One of the famous seafood places I tried is in Lukang Old Street. Even though they serve seafood dishes, the restaurant looks like a Chinese restaurant. In Taiwan, many seafood restaurants serve food in a Chinese restaurant way, served at a round table.</p>
+            
+            <div class="gallery" style="margin-top: 40px;">
+                <div class="gallery-item">
+                    <img src="Oyster Egg.jpg" alt="Oyster Omelet">
+                    <div class="gallery-caption">
+                        <strong>Oyster Omelet</strong> - A classic Taiwanese seafood dish
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quiz-container">
+                <h3 style="color: var(--navy); font-size: 1.8rem; margin-bottom: 30px;">Test Your Knowledge</h3>
+                <div class="quiz-question">
+                    <p>1. What is the main ingredient in oyster omelet?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'correct')">Fresh oysters</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'incorrect')">Chicken</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'incorrect')">Beef</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'incorrect')">Pork</div>
+                    </div>
+                    <div class="quiz-feedback correct-feedback">
+                        <i class="fas fa-check-circle"></i> Correct! Oyster omelet is made with fresh oysters.
+                    </div>
+                    <div class="quiz-feedback incorrect-feedback">
+                        <i class="fas fa-times-circle"></i> Incorrect. The correct answer is fresh oysters.
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>2. Where did bubble tea originate?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'incorrect')">Japan</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'incorrect')">China</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'correct')">Taiwan</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'incorrect')">Thailand</div>
+                    </div>
+                    <div class="quiz-feedback correct-feedback">
+                        <i class="fas fa-check-circle"></i> Correct! Bubble tea was invented in Taiwan in the 1980s.
+                    </div>
+                    <div class="quiz-feedback incorrect-feedback">
+                        <i class="fas fa-times-circle"></i> Incorrect. Bubble tea originated in Taiwan.
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title"><i class="fas fa-store"></i> Exploring Taiwan's Street Food</h2>
+            <p>Taiwan is also famous for its street food. Taiwan is not only famous for the Chinese food or the fishy seafood, it is also famous for the street food in the night markets. Street food is food that is served in the street. Taiwan's street food isn't only food from Taiwan, it also has food from all over the world. One of the places you can try street food is in Fengchia Night Market. Fengchia Night Market lets you explore endless street food.</p>
+            
+            <h3 style="color: var(--navy); margin-top: 50px; font-size: 1.8rem;">Night Market Phrases</h3>
+            <div class="vocabulary-list">
+                <div class="vocabulary-card">
+                    <h3>How much is this?</h3>
+                    <p>這個多少錢？(Zhège duōshǎo qián?)</p>
+                    <p><em>Essential for bargaining at night markets</em></p>
+                </div>
+                <div class="vocabulary-card">
+                    <h3>One more, please</h3>
+                    <p>請再來一個 (Qǐng zài lái yīgè)</p>
+                    <p><em>When you want to order more</em></p>
+                </div>
+                <div class="vocabulary-card">
+                    <h3>Too spicy!</h3>
+                    <p>太辣了！(Tài làle!)</p>
+                    <p><em>Important if you can't handle spicy food</em></p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <h3>Taiwan's Famous and Delicious Food</h3>
+        <p>Explore Taiwan's culinary wonders while improving your English skills</p>
+        
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+        
+        <p>&copy; 2023 Taiwan's Famous and Delicious Food. All rights reserved.</p>
+    </footer>
+    
+    <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+    
+    <script>
+        // Show/hide more facts
+        document.getElementById('moreFactsBtn').addEventListener('click', function() {
+            const moreFacts = document.getElementById('moreFacts');
+            if (moreFacts.style.display === 'none') {
+                moreFacts.style.display = 'block';
+                this.innerHTML = '<i class="fas fa-lightbulb"></i> Show Less Facts';
+            } else {
+                moreFacts.style.display = 'none';
+                this.innerHTML = '<i class="fas fa-lightbulb"></i> Show More Facts';
+            }
+        });
+        
+        // Quiz functionality
+        function checkAnswer(selectedOption, correctness) {
+            const questionContainer = selectedOption.closest('.quiz-question');
+            const correctFeedback = questionContainer.querySelector('.correct-feedback');
+            const incorrectFeedback = questionContainer.querySelector('.incorrect-feedback');
+            
+            // Remove all highlights first
+            questionContainer.querySelectorAll('.quiz-option').forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            
+            // Highlight the selected option
+            selectedOption.classList.add(correctness);
+            
+            // Show appropriate feedback
+            if (correctness === 'correct') {
+                correctFeedback.style.display = 'block';
+                incorrectFeedback.style.display = 'none';
+            } else {
+                correctFeedback.style.display = 'none';
+                incorrectFeedback.style.display = 'block';
+                
+                // Also highlight the correct answer
+                questionContainer.querySelectorAll('.quiz-option').forEach(option => {
+                    if (option.getAttribute('onclick').includes("'correct'")) {
+                        option.classList.add('correct');
+                    }
+                });
+            }
+        }
+        
+        // Back to top button
+        window.addEventListener('scroll', function() {
+            const backToTop = document.getElementById('backToTop');
+            const header = document.getElementById('mainHeader');
+            
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+                header.classList.add('scrolled');
+            } else {
+                backToTop.classList.remove('visible');
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('header a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animation for sections when scrolling
+        const sections = document.querySelectorAll('.section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Hero animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroContent = document.querySelector('.hero-content');
+            heroContent.style.animation = 'fadeInUp 1s forwards';
+        });
+    </script>
+</body>
+</html>
